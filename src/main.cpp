@@ -36,7 +36,7 @@ void setup()
 int state = LOW;
 void loop()
 {
-    servoManager.autoCloseGate();
+    irManager.checkIR();
     if (millis() - lastTimeReadRFID >= LIMIT_RATE_RFID)
     {
         String uuid = rfidManager.loop();
@@ -46,7 +46,6 @@ void loop()
             Serial.println("SCAN?" + uuid);
         }
     }
-    irManager.checkIR();
     // Đọc rfid
     // readRFID();
     if (Serial.available())
@@ -56,6 +55,7 @@ void loop()
             cmd.loop();
         }
     }
+    servoManager.autoCloseGate();
     // Serial.println("Alo");
 }
 

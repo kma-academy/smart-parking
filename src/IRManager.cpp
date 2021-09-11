@@ -1,3 +1,7 @@
+/* 
+ * Quản lý cảm biến hồng ngoại
+ * Khi có sự thay đổi gửi command IR?<địa chỉ>?<0|1>
+ */
 #include <Arduino.h>
 const unsigned long LIMIT_RATE_IR_SENSOR = 5000UL;
 class IRManager
