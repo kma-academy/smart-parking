@@ -2,7 +2,7 @@
 #include <Servo.h>
 const int _closePos = 90, _openPos = 0;
 
-const unsigned long TIME_AUTO_CLOSE_GATE = 1000UL;
+const unsigned long TIME_AUTO_CLOSE_GATE = 3000UL;
 class ServoManager
 {
 private:
