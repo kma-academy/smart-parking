@@ -1,23 +1,28 @@
-#include <Arduino_FreeRTOS.h>
+#include <Arduino.h>
 #include <Servo.h>
 const int _closePos = 90, _openPos = 0;
 
+const unsigned long TIME_AUTO_CLOSE_GATE = 1000UL;
 class ServoManager
 {
 private:
     int _pinIn, _pinOut;
     Servo gateIn, gateOut;
+    bool isOpenGateIn, isOpenGateOut;
+    unsigned long lastTimeOpenGateIn, lastTimeOpenGateOut;
 
 public:
     ServoManager(int pinIn, int pinOut)
     {
         this->_pinIn = pinIn;
         this->_pinOut = pinOut;
+        lastTimeOpenGateIn = 0UL;
+        lastTimeOpenGateOut = 0UL;
     }
     ~ServoManager()
     {
         this->_pinIn = 8;
-        this->_pinOut = 9;
+        this->_pinOut = 7;
     }
 
     void init()
@@ -29,16 +34,38 @@ public:
     }
     void openGate(bool isGateIn)
     {
-        // TaskHandle_t taskHandle;
-        Servo servo = isGateIn ? gateIn : gateOut;
-        xTaskCreate(ServoManager::taskOpen, "Open Gate", 100, &servo, 1, NULL);
+        if (isGateIn)
+        {
+            lastTimeOpenGateIn = millis();
+            if (!isOpenGateIn)
+            {
+                isOpenGateIn = true;
+                gateIn.write(_openPos);
+            }
+        }
+        else
+        {
+            lastTimeOpenGateOut = millis();
+            if (!isOpenGateOut)
+            {
+                isOpenGateOut = true;
+                gateOut.write(_openPos);
+            }
+        }
     }
-    static void taskOpen(void *pvParameters)
+
+    void autoCloseGate()
     {
-        Servo &servo = *(Servo *)pvParameters;
-        servo.write(_openPos);
-        vTaskDelay(1000);
-        servo.write(_closePos);
-        vTaskDelete(NULL);
+        unsigned long current = millis();
+        if (isOpenGateIn && current - lastTimeOpenGateIn >= TIME_AUTO_CLOSE_GATE)
+        {
+            gateIn.write(_closePos);
+            isOpenGateIn = false;
+        }
+        if (isOpenGateOut && current - lastTimeOpenGateOut >= TIME_AUTO_CLOSE_GATE)
+        {
+            gateOut.write(_closePos);
+            isOpenGateOut = false;
+        }
     }
 };
