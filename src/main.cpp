@@ -1,9 +1,9 @@
 
-#define DEBUG 1
-#if DEBUG == 1
-#define debug(x) Serial.println(x)
+#include "debug.h"
+#if USE_SOFTWARE_SERIAL == 1
+#define uartSerial softSerial
 #else
-#define debug(x)
+#define uartSerial Serial
 #endif
 #include <Arduino.h>
 #include <ServoManager.cpp>
@@ -12,13 +12,13 @@
 #include <LCDManager.cpp>
 #include <SoftwareSerial.h>
 #include <SerialCommand.h>
-// const byte RX = 3, TX = 2;
+const byte RX = 2, TX = 3;
+SoftwareSerial softSerial(RX, TX);
 const unsigned long LIMIT_RATE_RFID = 200L;
-// SoftwareSerial outSerial(RX, TX);
 ServoManager servoManager(8, 7);
 RFIDManager rfidManager(10, 9);
 IRManager irManager;
-LCDManager lcdManager(0x27, 0x26);
+LCDManager lcdManager(0x27, 0x27);
 SerialCommand cmd;
 unsigned long lastTimeReadRFID = 0L;
 void openGateHandler();
@@ -29,44 +29,43 @@ void setup()
     // put your setup code here, to run once:
     servoManager.init();
     Serial.begin(9600);
+    // uartSerial.begin(9600);
     // outSerial.begin(9600);
     irManager.init();
     rfidManager.init();
     lcdManager.init();
-    cmd.begin(Serial);
+    cmd.begin(uartSerial);
     cmd.addCommand((char *)"OPENGATE", NULL, openGateHandler, NULL, NULL);
     cmd.addCommand((char *)"LCDIN", NULL, showLCDOneHandler, NULL, NULL);
     cmd.addCommand((char *)"LCDOUT", NULL, showLCDTwoHandler, NULL, NULL);
-    Serial.println("Ready to connect");
+    debugln(F("Ready to connect"));
+    uartSerial.println("READY");
 }
-int state = LOW;
 void loop()
 {
-    // debug("Read serial");
-    if (Serial.available())
+    // debugln("Read serial");
+    if (uartSerial.available())
     {
-        while (Serial.available())
+        while (uartSerial.available())
         {
             cmd.loop();
         }
     }
-    // debug("Check IR");
-    irManager.checkIR();
-    // debug("Check RFID");
+    // debugln("Check RFID");
     if (millis() - lastTimeReadRFID >= LIMIT_RATE_RFID)
     {
         String uuid = rfidManager.loop();
         if (uuid.length() > 0)
         {
             lastTimeReadRFID = millis();
-            Serial.println("SCAN?" + uuid);
+            uartSerial.println("SCAN?" + uuid);
         }
     }
-    // Đọc rfid
-    // readRFID();
     // debug("Auto close gate");
     servoManager.autoCloseGate();
     // Serial.println("Alo");
+
+    irManager.scanIR(uartSerial);
 }
 
 void openGateHandler()
@@ -93,10 +92,10 @@ void showLCDOneHandler()
     if (lineOne == NULL)
         debug("ERROR");
     char *lineTwo = cmd.next();
-    debug(lineOne);
-    debug(lineTwo);
+    debugln(lineOne);
+    debugln(lineTwo);
     if (lineTwo == NULL)
-        strcpy(lineTwo, "ERROR");
+        strcpy(lineTwo, "");
     lcdManager.printLCD(1, lineOne, lineTwo);
 }
 
@@ -107,8 +106,8 @@ void showLCDTwoHandler()
         debug("ERROR");
     char *lineTwo = cmd.next();
     if (lineTwo == NULL)
-        strcpy(lineTwo, "ERROR");
-    debug(lineOne);
-    debug(lineTwo);
+        strcpy(lineTwo, "");
+    debugln(lineOne);
+    debugln(lineTwo);
     lcdManager.printLCD(2, lineOne, lineTwo);
 }
