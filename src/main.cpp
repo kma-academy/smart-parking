@@ -24,13 +24,13 @@ unsigned long lastTimeReadRFID = 0L;
 void openGateHandler();
 void showLCDOneHandler();
 void showLCDTwoHandler();
+void debugHandler();
 void setup()
 {
     // put your setup code here, to run once:
     servoManager.init();
     Serial.begin(9600);
-    // uartSerial.begin(9600);
-    // outSerial.begin(9600);
+    uartSerial.begin(9600);
     irManager.init();
     rfidManager.init();
     lcdManager.init();
@@ -38,8 +38,10 @@ void setup()
     cmd.addCommand((char *)"OPENGATE", NULL, openGateHandler, NULL, NULL);
     cmd.addCommand((char *)"LCDIN", NULL, showLCDOneHandler, NULL, NULL);
     cmd.addCommand((char *)"LCDOUT", NULL, showLCDTwoHandler, NULL, NULL);
+    cmd.addCommand((char *)"DEBUG", NULL, debugHandler, NULL, NULL);
     debugln(F("Ready to connect"));
     uartSerial.println("READY");
+    lcdManager.printLCD(1, "Hoc vien KTMM", "CNPMN");
 }
 void loop()
 {
@@ -64,7 +66,7 @@ void loop()
     // debug("Auto close gate");
     servoManager.autoCloseGate();
     // Serial.println("Alo");
-
+    lcdManager.resetLCD();
     irManager.scanIR(uartSerial);
 }
 
@@ -110,4 +112,11 @@ void showLCDTwoHandler()
     debugln(lineOne);
     debugln(lineTwo);
     lcdManager.printLCD(2, lineOne, lineTwo);
+}
+
+void debugHandler()
+{
+    char *arg = cmd.next();
+    Serial.print("ESP8266: ");
+    Serial.println(arg);
 }

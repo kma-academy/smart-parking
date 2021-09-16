@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-const unsigned long TIME_AUTO_CLEAR_LCD = 3000UL;
+const unsigned long TIME_AUTO_CLEAR_LCD = 5000UL;
 class LCDManager
 {
 
@@ -31,6 +31,7 @@ public:
         handler.setCursor(0, 1);
         handler.print(lineTwo);
         shouldReset[i - 1] = true;
+        lastTimeReset[i - 1] = millis();
     }
     void resetLCD()
     {
