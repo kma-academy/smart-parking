@@ -76,7 +76,7 @@ void openGateHandler()
     char *arg = cmd.next();
     if (arg == NULL)
         debug("ERROR");
-    debug("Receive open gate " + String(arg));
+    debugln("Receive open gate " + String(arg));
     if (strcmp(arg, "IN"))
         servoManager.openGate(true);
     else if (strcmp(arg, "OUT"))
@@ -94,7 +94,8 @@ void showLCDOneHandler()
     if (lineOne == NULL)
         debug("ERROR");
     char *lineTwo = cmd.next();
-    debugln(lineOne);
+    debug(lineOne);
+    debug("|");
     debugln(lineTwo);
     if (lineTwo == NULL)
         strcpy(lineTwo, "");
@@ -109,7 +110,8 @@ void showLCDTwoHandler()
     char *lineTwo = cmd.next();
     if (lineTwo == NULL)
         strcpy(lineTwo, "");
-    debugln(lineOne);
+    debug(lineOne);
+    debug("|");
     debugln(lineTwo);
     lcdManager.printLCD(2, lineOne, lineTwo);
 }

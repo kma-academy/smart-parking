@@ -54,7 +54,7 @@ public:
         if (!rfid.PICC_ReadCardSerial())
             return "";
 
-        debug(F("PICC type: "));
+        debugln(F("PICC type: "));
         MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
         debug(rfid.PICC_GetTypeName(piccType));
 
@@ -62,7 +62,7 @@ public:
             piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
             piccType != MFRC522::PICC_TYPE_MIFARE_4K)
         {
-            debug(F("The khong duoc ho tro"));
+            debugln(F("The khong duoc ho tro"));
             return "";
         }
 
@@ -77,8 +77,8 @@ public:
                 newUUID += "-";
             }
         }
-        debug(F("The NUID tag is:"));
-        debug(newUUID);
+        debug(F("The NUID tag is: "));
+        debugln(newUUID);
         // Halt PICC
         rfid.PICC_HaltA();
 
