@@ -41,7 +41,7 @@ void setup()
     cmd.addCommand((char *)"DEBUG", NULL, debugHandler, NULL, NULL);
     debugln(F("Ready to connect"));
     uartSerial.println("READY");
-    lcdManager.printLCD(1, "Hoc vien KTMM", "CNPMN");
+    lcdManager.printLCD(1, (char *)"Hoc vien KTMM", (char *)"CNPMN - Nhom 17");
 }
 void loop()
 {
@@ -66,6 +66,7 @@ void loop()
     // debug("Auto close gate");
     servoManager.autoCloseGate();
     // Serial.println("Alo");
+    lcdManager.scrollDisplay();
     lcdManager.resetLCD();
     irManager.scanIR(uartSerial);
 }
