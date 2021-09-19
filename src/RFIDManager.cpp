@@ -54,9 +54,9 @@ public:
         if (!rfid.PICC_ReadCardSerial())
             return "";
 
-        debugln(F("PICC type: "));
+        debug(F("PICC type: "));
         MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-        debug(rfid.PICC_GetTypeName(piccType));
+        debugln(rfid.PICC_GetTypeName(piccType));
 
         if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
             piccType != MFRC522::PICC_TYPE_MIFARE_1K &&

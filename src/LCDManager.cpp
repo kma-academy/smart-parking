@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-const unsigned long TIME_AUTO_CLEAR_LCD = 5000UL;
+const unsigned long TIME_AUTO_CLEAR_LCD = 10000UL;
 const unsigned long TIME_SCROLL_CONTENT = 200UL;
 class LCDManager
 {
