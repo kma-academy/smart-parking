@@ -4,7 +4,7 @@
  */
 #include <debug.h>
 #include <Arduino.h>
-const unsigned long LIMIT_RATE_IR_SENSOR = 500UL;
+const unsigned long LIMIT_RATE_IR_SENSOR = 2000UL;
 class IRManager
 {
 private:

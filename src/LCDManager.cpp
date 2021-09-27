@@ -37,6 +37,7 @@ public:
         shouldScrollContent[i - 1] = strlen(lineOne) > 16 || strlen(lineTwo) > 16;
         shouldReset[i - 1] = true;
         lastTimeReset[i - 1] = millis();
+        lastTimeScroll[i - 1] = millis();
     }
     void scrollDisplay()
     {
