@@ -29,23 +29,23 @@ public:
     void scanIR(Stream &uartSerial)
     {
         // debugln("Scan IR");
-        // if (millis() - this->lastTimeCheckIR >= LIMIT_RATE_IR_SENSOR)
-        // {
-        //     debugln("Check IR");
-        //     this->lastTimeCheckIR = millis();
-        for (int i = 0; i < 3; i++)
+        if (millis() - this->lastTimeCheckIR >= LIMIT_RATE_IR_SENSOR)
         {
-            int val = digitalRead(pin[i]);
-            // Có sự thay đổi
-            if (val != state[i])
+            // debugln("Check IR");
+            this->lastTimeCheckIR = millis();
+            for (int i = 0; i < 3; i++)
             {
-                uartSerial.print("IR?");
-                uartSerial.print((i + 1));
-                uartSerial.print("?");
-                uartSerial.println(val);
-                state[i] = val;
+                int val = digitalRead(pin[i]);
+                // Có sự thay đổi
+                if (val != state[i])
+                {
+                    uartSerial.print("IR?");
+                    uartSerial.print((i + 1));
+                    uartSerial.print("?");
+                    uartSerial.println(1 - val);
+                    state[i] = val;
+                }
             }
         }
-        // }
     }
 };

@@ -28,12 +28,12 @@ void debugHandler();
 void setup()
 {
     // put your setup code here, to run once:
-    servoManager.init();
     Serial.begin(9600);
     uartSerial.begin(9600);
     irManager.init();
     rfidManager.init();
     lcdManager.init();
+    servoManager.init();
     cmd.begin(uartSerial);
     cmd.addCommand((char *)"OPENGATE", NULL, openGateHandler, NULL, NULL);
     cmd.addCommand((char *)"LCDIN", NULL, showLCDOneHandler, NULL, NULL);
@@ -78,9 +78,9 @@ void openGateHandler()
     if (arg == NULL)
         debug("ERROR");
     debugln("Receive open gate " + String(arg));
-    if (strcmp(arg, "IN"))
+    if (strcmp(arg, "IN") == 0)
         servoManager.openGate(true);
-    else if (strcmp(arg, "OUT"))
+    else if (strcmp(arg, "OUT") == 0)
         servoManager.openGate(false);
     else
     {

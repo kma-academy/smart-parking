@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Servo.h>
-const int _closePos = 90, _openPos = 0;
+const int _closePosIn = 90, _openPosIn = 175;
+const int _closePosOut = 85, _openPosOut = 0;
 
 const unsigned long TIME_AUTO_CLOSE_GATE = 3000UL;
 class ServoManager
@@ -23,34 +24,36 @@ public:
     {
         this->_pinIn = 8;
         this->_pinOut = 7;
+        lastTimeOpenGateIn = 0UL;
+        lastTimeOpenGateOut = 0UL;
     }
 
     void init()
     {
         gateIn.attach(_pinIn);
-        gateIn.write(_closePos);
+        gateIn.write(_closePosIn);
         gateOut.attach(_pinOut);
-        gateOut.write(_closePos);
+        gateOut.write(_closePosOut);
     }
     void openGate(bool isGateIn)
     {
         if (isGateIn)
         {
             lastTimeOpenGateIn = millis();
-            if (!isOpenGateIn)
-            {
-                isOpenGateIn = true;
-                gateIn.write(_openPos);
-            }
+            // if (!isOpenGateIn)
+            // {
+            isOpenGateIn = true;
+            gateIn.write(_openPosIn);
+            // }
         }
         else
         {
             lastTimeOpenGateOut = millis();
-            if (!isOpenGateOut)
-            {
-                isOpenGateOut = true;
-                gateOut.write(_openPos);
-            }
+            // if (!isOpenGateOut)
+            // {
+            isOpenGateOut = true;
+            gateOut.write(_openPosOut);
+            // }
         }
     }
 
@@ -59,12 +62,12 @@ public:
         unsigned long current = millis();
         if (isOpenGateIn && current - lastTimeOpenGateIn >= TIME_AUTO_CLOSE_GATE)
         {
-            gateIn.write(_closePos);
+            gateIn.write(_closePosIn);
             isOpenGateIn = false;
         }
         if (isOpenGateOut && current - lastTimeOpenGateOut >= TIME_AUTO_CLOSE_GATE)
         {
-            gateOut.write(_closePos);
+            gateOut.write(_closePosOut);
             isOpenGateOut = false;
         }
     }

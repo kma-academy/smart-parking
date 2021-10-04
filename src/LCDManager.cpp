@@ -29,12 +29,12 @@ public:
             return;
         LiquidCrystal_I2C handler = i == 1 ? lcd : lcd2;
         handler.clear();
-        handler.backlight();
+        // handler.backlight();
         handler.setCursor(0, 0);
         handler.print(lineOne);
         handler.setCursor(0, 1);
         handler.print(lineTwo);
-        shouldScrollContent[i - 1] = strlen(lineOne) > 16 || strlen(lineTwo) > 16;
+        shouldScrollContent[i - 1] = false; /* strlen(lineOne) > 16 || strlen(lineTwo) > 16; */
         shouldReset[i - 1] = true;
         lastTimeReset[i - 1] = millis();
         lastTimeScroll[i - 1] = millis();
@@ -44,13 +44,13 @@ public:
         if (shouldScrollContent[0] && millis() - lastTimeScroll[0] >= TIME_SCROLL_CONTENT)
         {
             lastTimeScroll[0] = millis();
-            lcd.backlight();
+            // lcd.backlight();
             lcd.scrollDisplayLeft();
         }
         if (shouldScrollContent[1] && millis() - lastTimeScroll[1] >= TIME_SCROLL_CONTENT)
         {
             lastTimeScroll[1] = millis();
-            lcd2.backlight();
+            // lcd2.backlight();
             lcd2.scrollDisplayLeft();
         }
     }
