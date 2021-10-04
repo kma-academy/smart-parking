@@ -3,8 +3,9 @@
  * Khi có sự thay đổi gửi command IR?<địa chỉ>?<0|1>
  */
 #include <debug.h>
+#include <config.h>
 #include <Arduino.h>
-const unsigned long LIMIT_RATE_IR_SENSOR = 2000UL;
+// const unsigned long LIMIT_RATE_IR_SENSOR = 2000UL;
 class IRManager
 {
 private:

@@ -1,8 +1,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-const unsigned long TIME_AUTO_CLEAR_LCD = 10000UL;
-const unsigned long TIME_SCROLL_CONTENT = 200UL;
+#include <config.h>
+// const unsigned long TIME_AUTO_CLEAR_LCD = 10000UL;
+// const unsigned long TIME_SCROLL_CONTENT = 200UL;
 class LCDManager
 {
 
@@ -29,7 +30,9 @@ public:
             return;
         LiquidCrystal_I2C handler = i == 1 ? lcd : lcd2;
         handler.clear();
-        // handler.backlight();
+#if USE_BACKLIGHT == 1
+        handler.backlight();
+#endif
         handler.setCursor(0, 0);
         handler.print(lineOne);
         handler.setCursor(0, 1);

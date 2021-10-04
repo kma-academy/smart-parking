@@ -1,9 +1,10 @@
 #include <Arduino.h>
+#include <config.h>
 #include <Servo.h>
 const int _closePosIn = 90, _openPosIn = 175;
 const int _closePosOut = 85, _openPosOut = 0;
 
-const unsigned long TIME_AUTO_CLOSE_GATE = 3000UL;
+// const unsigned long TIME_AUTO_CLOSE_GATE = 3000UL;
 class ServoManager
 {
 private:

@@ -1,4 +1,4 @@
-
+#include "config.h"
 #include "debug.h"
 #if USE_SOFTWARE_SERIAL == 1
 #define uartSerial softSerial
@@ -14,7 +14,7 @@
 #include <SerialCommand.h>
 const byte RX = 2, TX = 3;
 SoftwareSerial softSerial(RX, TX);
-const unsigned long LIMIT_RATE_RFID = 200L;
+// const unsigned long LIMIT_RATE_RFID = 200L;
 ServoManager servoManager(8, 7);
 RFIDManager rfidManager(10, 9);
 IRManager irManager;
