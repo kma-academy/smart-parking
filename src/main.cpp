@@ -53,9 +53,10 @@ void loop()
             cmd.loop();
         }
     }
-    // debugln("Check RFID");
     if (millis() - lastTimeReadRFID >= LIMIT_RATE_RFID)
     {
+
+        // debugln("Check RFID");
         String uuid = rfidManager.loop();
         if (uuid.length() > 0)
         {
